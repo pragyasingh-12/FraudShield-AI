@@ -1,0 +1,51 @@
+<section class="panel">
+  <div class="score-line">
+    <div class="score-big">${result.finalScore}<small>/100</small></div>
+    <span class="badge badge-${result.riskLevel.cssClass}" style="font-size:1rem;padding:.2rem .9rem">${result.riskLevel}</span>
+    <span class="muted"><c:if test="${not empty txn.id and txn.id > 0}">Transaction ${txn.reference} &middot; </c:if>
+      &#8377;<fmt:formatNumber value="${txn.amount}" pattern="#,##0.00"/> to <c:out value="${txn.receiver}"/></span>
+  </div>
+  <div class="meter" aria-label="Risk score ${result.finalScore} out of 100">
+    <div class="meter-bar"><span class="m-low"></span><span class="m-medium"></span><span class="m-high"></span><span class="m-critical"></span></div>
+    <div class="meter-marker" style="left:${result.finalScore}%"></div>
+    <div class="meter-scale"><span>0 LOW</span><span>31 MEDIUM</span><span>61 HIGH</span><span>81 CRITICAL</span><span>100</span></div>
+  </div>
+  <h3>Why this result</h3>
+  <div class="explain"><c:out value="${result.explanation}"/></div>
+</section>
+
+<div class="grid grid-2">
+  <section class="panel">
+    <h3>Detection factors</h3>
+    <ul class="factor-list">
+      <c:forEach items="${result.factors}" var="f">
+        <li>
+          <span class="${f.triggered ? 'tick' : 'tick tick-ok'}">${f.triggered ? '&#10003;' : '&#8211;'}</span>
+          <span><strong>${f.name}</strong> &mdash; <c:out value="${f.description}"/></span>
+        </li>
+      </c:forEach>
+    </ul>
+  </section>
+  <section class="panel">
+    <h3>Score breakdown</h3>
+    <div class="table-wrap"><table>
+      <thead><tr><th>Factor</th><th class="num">Score</th><th class="num">Weight</th><th class="num">Points</th><th></th></tr></thead>
+      <tbody>
+      <c:forEach items="${result.factors}" var="f">
+        <tr>
+          <td>${f.name}</td><td class="num">${f.score}</td><td class="num">${f.weight}%</td>
+          <td class="num"><fmt:formatNumber value="${f.contribution}" maxFractionDigits="1"/></td>
+          <td style="width:30%"><div class="bar ${f.score >= 80 ? 'b-critical' : f.score >= 60 ? 'b-high' : f.score >= 40 ? 'b-medium' : ''}"><i style="width:${f.score}%"></i></div></td>
+        </tr>
+      </c:forEach>
+      <tr><td><strong>Rule score</strong></td><td colspan="2"></td><td class="num"><strong>${result.ruleScore}</strong></td><td></td></tr>
+      <c:if test="${result.mlUsed}">
+        <tr><td><strong>Weka ML probability</strong></td><td class="num">${result.mlScore}</td><td colspan="3" class="muted">blended with the rule score</td></tr>
+      </c:if>
+      <tr><td><strong>Final score</strong></td><td colspan="2"></td><td class="num"><strong>${result.finalScore}</strong></td><td></td></tr>
+      </tbody></table></div>
+    <p class="muted" style="margin-bottom:0">Method: <c:out value="${result.analysisMethod}"/><br>
+      <c:if test="${not empty result.mlSummary}"><c:out value="${result.mlSummary}"/><br></c:if>
+      Analysed: ${result.analyzedAtFormatted}</p>
+  </section>
+</div>

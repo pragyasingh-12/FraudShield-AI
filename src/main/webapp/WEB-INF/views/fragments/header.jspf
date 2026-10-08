@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <c:if test="${autoRefresh}"><meta http-equiv="refresh" content="2"></c:if>
+  <title><c:out value="${pageTitle}"/> | FraudShield AI</title>
+  <link rel="stylesheet" href="${pageContext.request.contextPath}/css/style.css">
+</head>
+<body>
+<c:set var="ctx" value="${pageContext.request.contextPath}"/>
+<header class="topbar">
+  <a class="brand" href="${ctx}/dashboard"><span class="brand-mark" aria-hidden="true"></span>FraudShield AI</a>
+  <c:if test="${not empty sessionScope.user}">
+    <nav class="nav" aria-label="Main">
+      <a href="${ctx}/dashboard" class="${activeNav == 'dashboard' ? 'active' : ''}">Dashboard</a>
+      <a href="${ctx}/transactions/add" class="${activeNav == 'add' ? 'active' : ''}">Add transaction</a>
+      <a href="${ctx}/analyze" class="${activeNav == 'analyze' ? 'active' : ''}">Analyze</a>
+      <a href="${ctx}/history" class="${activeNav == 'history' ? 'active' : ''}">History</a>
+      <a href="${ctx}/alerts" class="${activeNav == 'alerts' ? 'active' : ''}">Alerts</a>
+      <a href="${ctx}/analytics" class="${activeNav == 'analytics' ? 'active' : ''}">Analytics</a>
+      <a href="${ctx}/users" class="${activeNav == 'users' ? 'active' : ''}">Users</a>
+      <a href="${ctx}/about" class="${activeNav == 'about' ? 'active' : ''}">About</a>
+    </nav>
+    <div class="session">
+      <span class="who"><c:out value="${sessionScope.user.name}"/> <small>(<c:out value="${sessionScope.user.role}"/>)</small></span>
+      <a class="btn btn-small btn-ghost" href="${ctx}/logout">Log out</a>
+    </div>
+  </c:if>
+</header>
+<main class="container">
+<c:if test="${not empty sessionScope.flash}">
+  <div class="notice notice-${sessionScope.flashType}" role="status"><c:out value="${sessionScope.flash}"/></div>
+  <c:remove var="flash" scope="session"/><c:remove var="flashType" scope="session"/>
+</c:if>

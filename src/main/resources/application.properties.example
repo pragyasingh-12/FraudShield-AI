@@ -1,0 +1,16 @@
+# FraudShield AI - configuration template.
+# Copy this file to application.properties and fill in YOUR values.
+# Any value can also be overridden with an environment variable
+# (db.url -> FRAUDSHIELD_DB_URL, db.user -> FRAUDSHIELD_DB_USER, ...).
+db.driver=com.mysql.cj.jdbc.Driver
+db.url=jdbc:mysql://localhost:3306/fraudshield_db?useSSL=false&allowPublicKeyRetrieval=true&serverTimezone=Asia/Kolkata
+db.user=YOUR_MYSQL_USER
+db.password=YOUR_MYSQL_PASSWORD
+
+# Risk engine
+risk.rule.weight=0.75
+risk.ml.weight=0.25
+analysis.threads=4
+analytics.refresh.seconds=30
+auth.max.failed.attempts=5
+auth.lock.minutes=5

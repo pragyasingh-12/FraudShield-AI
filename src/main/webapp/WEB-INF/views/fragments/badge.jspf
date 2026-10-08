@@ -1,0 +1,4 @@
+<c:choose>
+  <c:when test="${empty badgeLevel}"><span class="badge badge-pending">PENDING</span></c:when>
+  <c:otherwise><span class="badge badge-${badgeLevel.cssClass}">${badgeLevel}</span></c:otherwise>
+</c:choose>

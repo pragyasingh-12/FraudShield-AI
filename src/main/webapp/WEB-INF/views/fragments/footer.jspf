@@ -1,0 +1,5 @@
+</main>
+<footer class="footer">FraudShield AI &mdash; academic simulation using synthetic data. Not connected to any real UPI or banking system.</footer>
+<script src="${pageContext.request.contextPath}/js/app.js"></script>
+</body>
+</html>

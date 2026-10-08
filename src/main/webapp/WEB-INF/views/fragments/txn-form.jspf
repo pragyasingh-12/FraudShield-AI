@@ -1,0 +1,55 @@
+<form id="txn-form" method="post" action="${ctx}${formAction}">
+  <%@ include file="csrf.jspf" %>
+  <div class="form-grid">
+    <div>
+      <label for="userId">Customer account</label>
+      <select id="userId" name="userId" required>
+        <c:forEach items="${customers}" var="c">
+          <option value="${c.id}" data-device="<c:out value='${usualDevice[c.id]}'/>"
+                  data-location="<c:out value='${usualLocation[c.id]}'/>" data-avg="${avgAmount[c.id]}"
+                  ${param.userId == c.id ? 'selected' : ''}><c:out value="${c.name}"/></option>
+        </c:forEach>
+      </select>
+    </div>
+    <div>
+      <label for="amount">Amount (&#8377;)</label>
+      <input id="amount" name="amount" type="number" step="0.01" min="0.01" required value="<c:out value='${param.amount}'/>">
+    </div>
+    <div>
+      <label for="type">Payment type</label>
+      <select id="type" name="type">
+        <c:forEach items="${types}" var="t"><option value="${t}" ${param.type == t ? 'selected' : ''}>${t}</option></c:forEach>
+      </select>
+    </div>
+    <div>
+      <label for="receiver">Receiver / beneficiary</label>
+      <input id="receiver" name="receiver" required maxlength="100" placeholder="shop@okaxis" value="<c:out value='${param.receiver}'/>">
+      <div class="field-hint">UPI payments need an ID like name@bank</div>
+    </div>
+    <div>
+      <label for="time">Date and time</label>
+      <input id="time" name="time" type="datetime-local" required value="<c:out value='${nowValue}'/>">
+    </div>
+    <div>
+      <label for="deviceId">Device ID</label>
+      <input id="deviceId" name="deviceId" required maxlength="64" placeholder="DEV-RAHUL-A1" value="<c:out value='${param.deviceId}'/>">
+      <div class="field-hint">An ID the customer has not used before counts as a new device</div>
+    </div>
+    <div>
+      <label for="location">Location</label>
+      <input id="location" name="location" required maxlength="60" placeholder="Delhi" value="<c:out value='${param.location}'/>">
+    </div>
+  </div>
+  <div class="actions">
+    <button class="btn" type="submit" name="action" value="submit">${submitLabel}</button>
+    <button class="btn btn-secondary" type="button" data-preset="normal">Fill normal example</button>
+    <button class="btn btn-secondary" type="button" data-preset="suspicious">Fill suspicious example</button>
+    <c:if test="${showBurst}">
+      <span style="margin-left:auto;display:flex;gap:.4rem;align-items:center">
+        <label for="count" style="margin:0">Rapid payments</label>
+        <input id="count" name="count" type="number" min="2" max="8" value="5" style="width:70px">
+        <button class="btn btn-danger" type="submit" name="action" value="burst">Simulate rapid burst</button>
+      </span>
+    </c:if>
+  </div>
+</form>
